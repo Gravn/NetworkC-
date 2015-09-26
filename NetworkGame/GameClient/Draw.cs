@@ -18,31 +18,44 @@ namespace GameClient
         {
             ConsoleColor fg = ConsoleColor.Black;
             ConsoleColor bg = ConsoleColor.Magenta;
+            //int j = 0;
             for (int i = 0; i < color.Length; i++)
             {
-                for (int j = 0; j < color[i].Length; j++)
+                for (int j=0; j < color[i].Length; j++)
                 {
-                    switch(color[i][j])
+                    switch (color[i][j])
                     {
                         case 'G':
                             bg = ConsoleColor.Green;
+                            DrawColor(posX+j, posY + i, bg);
                             break;
                         case 'B':
                             bg = ConsoleColor.Blue;
+                            DrawColor(posX + j, posY + i, bg);
                             break;
+                        case 'b':
+                            bg = ConsoleColor.DarkBlue;
+                            DrawColor(posX + j, posY + i, bg);
+                            break;
+
                         case 'R':
                             bg = ConsoleColor.Red;
+                            DrawColor(posX + j, posY + i, bg);
                             break;
                         case 'g':
                             bg = ConsoleColor.Gray;
+                            DrawColor(posX + j, posY + i, bg);
+                            break;
+
+                        case ' ':
                             break;
 
                         default:
-                        bg = ConsoleColor.White;
-                        break;
+                            bg = ConsoleColor.White;
+                            DrawColor(posX + i, posY + j, bg);
+                            break;
                     }
 
-                    DrawColor(posY + j, posX + i, bg);
                 }
             }
         }

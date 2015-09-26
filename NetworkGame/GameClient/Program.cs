@@ -9,7 +9,7 @@ namespace GameClient
     class Program
     {
         private static bool run = true;
-        private static GameClass game = new GameClass();
+        private static GameManager game = new GameManager();
 
         static void Main(string[] args)
         {

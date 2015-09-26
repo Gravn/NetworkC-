@@ -6,31 +6,21 @@ using System.Threading.Tasks;
 
 namespace GameClient
 {
-    class GameClass
+    class BattleShipMap
     {
-        bool quit = false;
-
-        public GameClass()
+        public BattleShipMap()
         {
-
+            DrawMap();
         }
 
-        public void Setup()
+        public static void DrawMap()
         {
-            Console.SetWindowSize(90, 50);
-            Console.SetBufferSize(90, 50);
-
-            Console.CursorVisible = false;
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Clear();
             Draw a = new Draw();
-            
 
             //Setting up battle map:
-            for (int i = 0; i < Console.BufferWidth-1; i++)
+            for (int i = 0; i < Console.BufferWidth - 1; i++)
             {
-                for (int j = 0; j <= Console.BufferHeight-3; j++)
+                for (int j = 0; j <= Console.BufferHeight - 3; j++)
                 {
                     ConsoleColor bg = ConsoleColor.Blue;
                     a.DrawColor(i, j, bg);
@@ -46,7 +36,7 @@ namespace GameClient
                         }
                         a.DrawColor(i, j, bg);
 
-                        if ((j == 2||j==46) && i%4==2)
+                        if ((j == 2 || j == 46) && i % 4 == 2)
                         {
                             if (i < 44)
                             {
@@ -56,11 +46,11 @@ namespace GameClient
                             else
                             {
                                 Console.SetCursorPosition(i, j);
-                                Console.Write((i-44) / 4 - 1);
+                                Console.Write((i - 44) / 4 - 1);
                             }
                         }
 
-                        if((i==2||i==46) && j%4 == 2)
+                        if ((i == 2 || i == 46) && j % 4 == 2)
                         {
                             Console.SetCursorPosition(i, j);
                             char c = 'X';
@@ -108,67 +98,6 @@ namespace GameClient
                         }
                         a.DrawColor(i, j, bg);
                     }
-                }
-            }
-            
-            //Drawing ships, automate this?
-            a.DrawPicture(3*3,3*3, new string[]
-            {
-                "   B   B  B",
-                "   B   B   ",
-                "   B   B  B"
-                
-            });
-
-            a.DrawPicture(3*8+1, 3*4+1, new string[]
-            {
-                "   ",
-                "   ",
-                "   ",
-                "BBB",
-                "   ",
-                "   ",
-                "   ",
-                "BBB",
-                "RgRB B ",
-                "gRgBB B",
-                "RgRB B ",
-                "BBB",
-                "   ",
-                "   ",
-                "B B"
-            });
-
-            Console.ReadKey();
-        }
-
-        public void Update()
-        {
-            if (Console.KeyAvailable)
-            {
-                switch (Console.ReadKey().Key)
-                {
-                    case ConsoleKey.UpArrow:
-                    case ConsoleKey.W:
-                        //UP
-                        break;
-
-                    case ConsoleKey.DownArrow:
-                    case ConsoleKey.S:
-                        //Down
-                        break;
-
-                    case ConsoleKey.LeftArrow:
-                    case ConsoleKey.A:
-                        //Left
-                        break;
-
-                    case ConsoleKey.RightArrow:
-                    case ConsoleKey.D:
-                        //right
-                        break;
-
-
                 }
             }
         }
