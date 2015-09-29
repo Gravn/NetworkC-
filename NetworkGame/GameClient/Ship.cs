@@ -8,7 +8,7 @@ namespace GameClient
 {
     class Ship:GameObject
     {
-        public int type, rotation;
+        public int type, rotation,length;
 
         public Ship(int posX,int posY,int type,int rotation):base(posX,posY)
         {
@@ -17,11 +17,10 @@ namespace GameClient
             Setup();
         }
 
-        
-
         public void Setup()
         {
-            GameManager.drawer.DrawPicture(posX, posY, GameManager.ships[type]);
+            length = type;
+            //GameManager.drawer.DrawPicture(posX, posY, GameManager.ships[type]);
         }
 
         public override void Update(float deltaTime)
@@ -31,7 +30,129 @@ namespace GameClient
 
         public override void Draw()
         {
-            GameManager.drawer.DrawPicture(posX, posY, GameManager.ships[type]);
+            switch (rotation)
+            {
+                case 0:
+                    for (int i = 1; i <= type - 1; i++)
+                    {
+                        GameManager.drawer.DrawPicture(posX + i * 4, posY + 1, new string[]
+                    {
+                        "WWWWW",
+                        "WWWWW",
+                        "WWWWW",
+                    });
+                    }
+
+                    GameManager.drawer.DrawPicture(posX + 1, posY + 1, new string[]
+                {
+                    " WWW",
+                    "WWWW",
+                    " WWW",
+                });
+
+                    GameManager.drawer.DrawPicture(posX + 1 + type * 4, posY + 1, new string[]
+                {
+                    "W",
+                    "WWW",
+                    "W",
+                });
+
+
+                    break;
+                case 1:
+               
+                    for (int i = 1; i <= type - 1; i++)
+                    {
+
+                        GameManager.drawer.DrawPicture(posX + 1, posY + i * 4, new string[]
+                    {
+                        "WWW",
+                        "WWW",
+                        "WWW",
+                        "WWW",
+                        "WWW"
+                    });
+                    }
+
+                    GameManager.drawer.DrawPicture(posX + 1, posY + 1, new string[]
+                {
+                    " W ",
+                    "WWW",
+                    "WWW",
+                    "WWW"
+                });
+
+                    GameManager.drawer.DrawPicture(posX + 1, posY + type * 4, new string[]
+                {
+                    "WWW",
+                    "WWW",
+                    " W ",
+                    " W "
+                });
+
+                    break;
+
+                case 2:
+                   
+                    for (int i = 1; i <= type - 1; i++)
+                    {
+                        GameManager.drawer.DrawPicture(posX - i * 4, posY + 1, new string[]
+                    {
+                        "WWWWW",
+                        "WWWWW",
+                        "WWWWW",
+                    });
+                    }
+
+                    GameManager.drawer.DrawPicture(posX, posY + 1, new string[]
+                {
+                    "WWW ",
+                    "WWWW",
+                    "WWW",
+                });
+
+                    GameManager.drawer.DrawPicture(posX + 1 - type * 4, posY + 1, new string[]
+                {
+                    "  W",
+                    "WWW",
+                    "  W",
+                });
+
+                    break;
+                case 3:
+
+                    for (int i = 1; i <= type - 1; i++)
+                    {
+
+                        GameManager.drawer.DrawPicture(posX + 1, posY - i * 4, new string[]
+                    {
+                        "WWW",
+                        "WWW",
+                        "WWW",
+                        "WWW",
+                        "WWW"
+                    });
+                    }
+
+                    GameManager.drawer.DrawPicture(posX + 1, posY, new string[]
+                {
+                    "WWW",
+                    "WWW",
+                    "WWW",
+                    " W "
+                });
+
+                    GameManager.drawer.DrawPicture(posX + 1, posY + 1 - type * 4, new string[]
+                {
+                    " W ",
+                    " W ",
+                    "WWW",
+                });
+
+                    break;
+            }
+
+            //GameManager.drawer.DrawPicture(posX, posY, GameManager.ships[type]);
             base.Draw();
         }
     }

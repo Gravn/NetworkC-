@@ -22,7 +22,7 @@ namespace GameClient
             base.Update(deltaTime);
         }
 
-        public void Move(int direction)
+        public virtual void Move(int direction)
         {
             if(direction == 0 && posX < 40)
             {
@@ -49,7 +49,7 @@ namespace GameClient
             }
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             GameManager.drawer.DrawPicture(posX, posY, new string[]
             {

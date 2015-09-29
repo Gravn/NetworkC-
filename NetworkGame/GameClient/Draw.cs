@@ -47,12 +47,27 @@ namespace GameClient
                             DrawColor(posX + j, posY + i, bg);
                             break;
 
+                        case 'w':
+                            bg = ConsoleColor.DarkGray;
+                            DrawColor(posX + j, posY + i, bg);
+                            break;
+
+                        case 'y':
+                            bg = ConsoleColor.Yellow;
+                            DrawColor(posX + j, posY + i, bg);
+                            break;
+
+                        case 'W':
+                            bg = ConsoleColor.White;
+                            DrawColor(posX + j, posY + i, bg);
+                            break;
+
                         case ' ':
                             break;
 
                         default:
                             bg = ConsoleColor.White;
-                            DrawColor(posX + i, posY + j, bg);
+                            DrawColor(posX + j, posY + i, bg);
                             break;
                     }
 
@@ -68,6 +83,13 @@ namespace GameClient
                 Console.BackgroundColor = bg;
                 Console.Write(" ");
             }
+        }
+
+        public void DrawText(int x, int y,string text, ConsoleColor fg)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = fg;
+            Console.Write(text);
         }
 
         
