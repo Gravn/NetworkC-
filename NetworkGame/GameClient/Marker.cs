@@ -24,7 +24,7 @@ namespace GameClient
 
         public virtual void Move(int direction)
         {
-            if(direction == 0 && posX < 40)
+            if(direction == 0 && posX < 84)
             {
                 Clear();
                 posX += 4;
@@ -36,7 +36,7 @@ namespace GameClient
                 posY += 4;
             }
 
-            if (direction == 2 && posX > 4)
+            if (direction == 2 && posX > 48)
             {
                 Clear();
                 posX -= 4;

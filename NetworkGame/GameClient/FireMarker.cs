@@ -41,11 +41,20 @@ namespace GameClient
                 case ConsoleKey.Spacebar:
                     
                     //Fire!
-
+                    Fire();
                     break;
             }
 
             base.Update(deltaTime);
+        }
+
+        public void Fire()
+        {
+            //Fire at position
+
+
+
+            GameManager.EndTurn();
         }
     }
 }

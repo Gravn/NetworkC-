@@ -13,7 +13,16 @@ namespace GameClient
         public static Draw drawer = new Draw();
 
         public static int[,] grid = new int[10,10];
+        public static int[] ships = new int[] { 2, 2, 1, 1, 1 };
 
+
+        //Ship placement
+        public static bool moreToPlace = true;
+        public static bool placerRemoved = false;
+        public static ShipPlacementMarker shipPlacer = new ShipPlacementMarker(16, 16);
+
+
+        //All GameObjects
         private static List<GameObject> gameObjects = new List<GameObject>();
 
         public static List<GameObject> GameObjects
@@ -67,7 +76,8 @@ namespace GameClient
 
             //start game
             BattleShipMap map = new BattleShipMap();
-            gameObjects.Add(new ShipPlacementMarker(8,8));
+
+            gameObjects.Add(shipPlacer);
             //gameObjects.Add(new FireMarker(8,8,"G"));
             //gameObjects.Add(new Marker(76,16,"R"));
             
@@ -78,7 +88,7 @@ namespace GameClient
         {
             TimeSpan deltaTimeSpan = DateTime.Now-end;
             int milliseconds = deltaTimeSpan.Milliseconds > 0 ? deltaTimeSpan.Milliseconds : 1;
-            deltaTime = 1f/1000f/(float)milliseconds;
+            deltaTime = 1f/10/milliseconds;
             end = DateTime.Now;
             if (Console.KeyAvailable)
             {
@@ -86,7 +96,6 @@ namespace GameClient
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.BackgroundColor = ConsoleColor.Black;
                 currentKey = Console.ReadKey().Key;
-
             }
 
             for (int i = 0; i < gameObjects.Count; i++)
@@ -115,9 +124,19 @@ namespace GameClient
 
         }
 
-        public static void PlaceShip(int x, int y)
+        public static void EndTurn()
         {
-            gameObjects.Add(new Ship(x+1,y+1,0,0));
+            //Multiplayer:
+            //Endturn and send message to other player via NetworkManager(not implemented yet)
+
+            //local:
+            //Change player(not implemented yet)
+        }
+
+        public static void ChangeGameMode()
+        {
+            gameObjects.Add(new FireMarker(shipPlacer.PosX + 44, shipPlacer.PosY, "G"));
+            gameObjects.Remove(shipPlacer);
         }
     }
 }

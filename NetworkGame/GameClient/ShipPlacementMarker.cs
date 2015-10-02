@@ -8,6 +8,10 @@ namespace GameClient
 {
     class ShipPlacementMarker:GameObject
     {
+        //ShipPlacementMarker is used in setup of any Battleship game.
+        //When all ships have been placed, the gamemode changes into firering mode, where FireMarkers is used.
+
+
         public float timer = 0;
         public int selectedShip;
         public int rotation;
@@ -60,9 +64,9 @@ namespace GameClient
 
 
             }
-            Console.Title = "Pos: "+posX+"|"+posY+" R: "+rotation;
+            Console.Title = "" + timer;
             timer += deltaTime;
-            if (timer >= .1f)
+            if (timer >= 1f)
             {
                 Clear();
                 timer = 0;
@@ -283,95 +287,121 @@ namespace GameClient
         {
             bool occupied = false;
 
-            switch(rotation)
+            if(GameManager.ships[selectedShip]>0)
             {
-                case 0:
-                    for (int i = 0; i <= selectedShip; i++)
-                    {
-                        if (GameManager.grid[(posX / 4)-1, (posY / 4)-1] != 0)
-                        {
-                            occupied = true;
-                            return;
-                        }
-                    }
 
-                    if (!occupied)
-                    {
+                switch(rotation)
+                {
+                    case 0:
                         for (int i = 0; i <= selectedShip; i++)
                         {
-                            GameManager.grid[(posX / 4)-1+i,(PosY / 4)-1] = 1;
+                            if (GameManager.grid[(posX / 4)-1+i, (posY / 4)-1] != 0)
+                            {
+                                occupied = true;
+                                return;
+                            }
                         }
-                        GameManager.GameObjects.Add(new Ship(posX, posY, selectedShip, rotation));
-                    }
-                    break;
 
-                case 1:
-                    for (int i = 0; i <= selectedShip; i++)
-                    {
-                        if (GameManager.grid[(posX / 4)-1, (posY / 4)-1+i] != 0)
+                        if (!occupied)
                         {
-                            occupied = true;
-                            return;
+                            for (int i = 0; i <= selectedShip; i++)
+                            {
+                                GameManager.grid[(posX / 4)-1+i,(PosY / 4)-1] = selectedShip+1;
+                            }
                         }
-                    }
+                        break;
 
-                    if (!occupied)
-                    {
+                    case 1:
                         for (int i = 0; i <= selectedShip; i++)
                         {
-                            GameManager.grid[(posX / 4)-1,(PosY / 4)-1+i] = 1;
+                            if (GameManager.grid[(posX / 4)-1, (posY / 4)-1+i] != 0)
+                            {
+                                occupied = true;
+                                return;
+                            }
                         }
-                        GameManager.GameObjects.Add(new Ship(posX, posY, selectedShip, rotation));
-                    }
-                    break;
 
-                case 2:
-                    for (int i = selectedShip; i >= 0; i--)
-                    {
-                        if (GameManager.grid[(posX / 4)-1-i, (posY / 4)-1] != 0)
+                        if (!occupied)
                         {
-                            occupied = true;
-                            return;
+                            for (int i = 0; i <= selectedShip; i++)
+                            {
+                                GameManager.grid[(posX / 4) - 1, (PosY / 4) - 1 + i] = selectedShip+1;
+                            }
                         }
-                    }
+                        break;
 
-                    if (!occupied)
-                    {
-                        for (int i = selectedShip; i >=0; i--)
-                        {
-                            GameManager.grid[(posX / 4)-1-i,(PosY / 4)-1] = 1;
-                        }
-                        GameManager.GameObjects.Add(new Ship(posX, posY, selectedShip, rotation));
-                    }
-                    break;
-
-                case 3:
-                    for (int i = selectedShip; i >= 0; i--)
-                    {
-                        if (GameManager.grid[(posX / 4)-1, (posY / 4)-1-i] != 0)
-                        {
-                            occupied = true;
-                            return;
-                        }
-                    }
-
-                    if (!occupied)
-                    {
+                    case 2:
                         for (int i = selectedShip; i >= 0; i--)
                         {
-                            GameManager.grid[(posX / 4)-1,(PosY / 4)-1-i] = 1;
+                            if (GameManager.grid[(posX / 4)-1-i, (posY / 4)-1] != 0)
+                            {
+                                occupied = true;
+                                return;
+                            }
                         }
-                        GameManager.GameObjects.Add(new Ship(posX, posY, selectedShip, rotation));
+
+                        if (!occupied)
+                        {
+                            for (int i = selectedShip; i >=0; i--)
+                            {
+                                GameManager.grid[(posX / 4) - 1 - i, (PosY / 4) - 1] = selectedShip+1;
+                            }
+                        }
+                        break;
+
+                    case 3:
+                        for (int i = selectedShip; i >= 0; i--)
+                        {
+                            if (GameManager.grid[(posX / 4)-1, (posY / 4)-1-i] != 0)
+                            {
+                                occupied = true;
+                                return;
+                            }
+                        }
+
+                        if (!occupied)
+                        {
+                            for (int i = selectedShip; i >= 0; i--)
+                            {
+                                GameManager.grid[(posX / 4) - 1, (PosY / 4) - 1 - i] = selectedShip+1;
+                            }
+                        }
+                        break;
+                }
+
+                GameManager.GameObjects.Add(new Ship(posX,PosY,selectedShip,rotation));
+                GameManager.ships[selectedShip]--;
+                Clear();
+                bool moreToPlace = true;
+                for (int i = 0; i < GameManager.ships.Length; i++)
+                {
+                    if (GameManager.ships[i] == 0)
+                    {
+                        moreToPlace = false;
                     }
-                    break;
+                    else
+                    {
+                        moreToPlace = true;
+                    }
+                }
 
+                if(moreToPlace == false)
+                {
+                    GameManager.ChangeGameMode();
+                }
 
-                
+                GameManager.EndTurn();
             }
+            
         }
         
         public override void Draw()
         {
+            Console.BackgroundColor = ConsoleColor.Black;
+            GameManager.drawer.DrawText(5, 48, "Carrier(5): " + GameManager.ships[4]+" Battleship(4): "+GameManager.ships[3]+" Cruiser(3): "+GameManager.ships[2],ConsoleColor.White);
+            GameManager.drawer.DrawText(5, 49, "Destroyer(2): " + GameManager.ships[1] + " Submarine(1): " + GameManager.ships[0], ConsoleColor.White);
+      
+
             switch(rotation)
             {
                 case 0:
@@ -392,30 +422,32 @@ namespace GameClient
                    "    G",
                    "   GG",
                 });
-
-                for (int i = 1; i <= selectedShip-1; i++)
+                if(timer >=0.5f)
                 {
-                    GameManager.drawer.DrawPicture(posX + i * 4, posY+1, new string[]
+                    for (int i = 1; i <= selectedShip-1; i++)
                     {
-                        "WWWWW",
-                        "WWWWW",
-                        "WWWWW",
+                        GameManager.drawer.DrawPicture(posX + i * 4, posY+1, new string[]
+                        {
+                            "WWWWW",
+                            "WWWWW",
+                            "WWWWW",
+                        });
+                    }
+
+                    GameManager.drawer.DrawPicture(posX + 1, posY + 1, new string[]
+                    {
+                        " WWW",
+                        "WWWW",
+                        " WWW",
+                    });
+
+                    GameManager.drawer.DrawPicture(posX + 1 + selectedShip * 4, posY + 1, new string[]
+                    {
+                        "W",
+                        "WWW",
+                        "W",
                     });
                 }
-
-                GameManager.drawer.DrawPicture(posX + 1, posY + 1, new string[]
-                {
-                    " WWW",
-                    "WWWW",
-                    " WWW",
-                });
-
-                GameManager.drawer.DrawPicture(posX + 1 + selectedShip * 4, posY + 1, new string[]
-                {
-                    "W",
-                    "WWW",
-                    "W",
-                });
 
 
                     break;
@@ -435,34 +467,37 @@ namespace GameClient
                    "GG GG"
                 });
 
-                for (int i = 1; i <= selectedShip-1; i++)
+                if (timer >= 0.5f)
                 {
-
-                    GameManager.drawer.DrawPicture(posX+1, posY + i * 4, new string[]
+                    for (int i = 1; i <= selectedShip - 1; i++)
                     {
-                        "WWW",
-                        "WWW",
+
+                        GameManager.drawer.DrawPicture(posX + 1, posY + i * 4, new string[]
+                        {
+                            "WWW",
+                            "WWW",
+                            "WWW",
+                            "WWW",
+                            "WWW"
+                        });
+                    }
+
+                    GameManager.drawer.DrawPicture(posX + 1, posY + 1, new string[]
+                    {
+                        " W ",
                         "WWW",
                         "WWW",
                         "WWW"
                     });
-                }
 
-                GameManager.drawer.DrawPicture(posX + 1, posY+1, new string[]
-                {
-                    " W ",
-                    "WWW",
-                    "WWW",
-                    "WWW"
-                });
-
-                GameManager.drawer.DrawPicture(posX + 1, posY + selectedShip * 4, new string[]
-                {
-                    "WWW",
-                    "WWW",
-                    " W ",
-                    " W "
-                });
+                        GameManager.drawer.DrawPicture(posX + 1, posY + selectedShip * 4, new string[]
+                    {
+                        "WWW",
+                        "WWW",
+                        " W ",
+                        " W "
+                    });
+                    }
                 
                 break;
 
@@ -484,31 +519,32 @@ namespace GameClient
                        "    G",
                        "   GG",
                     });
-
-                for (int i = 1; i <= selectedShip-1; i++)
-                {
-                    GameManager.drawer.DrawPicture(posX - i * 4, posY + 1, new string[]
+                    if (timer >= 0.5f)
                     {
-                        "WWWWW",
-                        "WWWWW",
-                        "WWWWW",
-                    });
-                }
+                        for (int i = 1; i <= selectedShip - 1; i++)
+                        {
+                            GameManager.drawer.DrawPicture(posX - i * 4, posY + 1, new string[]
+                            {
+                                "WWWWW",
+                                "WWWWW",
+                                "WWWWW",
+                            });
+                        }
 
-                GameManager.drawer.DrawPicture(posX, posY + 1, new string[]
-                {
-                    "WWW ",
-                    "WWWW",
-                    "WWW",
-                });
+                        GameManager.drawer.DrawPicture(posX, posY + 1, new string[]
+                        {
+                            "WWW ",
+                            "WWWW",
+                            "WWW",
+                        });
 
-                GameManager.drawer.DrawPicture(posX + 1 - selectedShip * 4, posY + 1, new string[]
-                {
-                    "  W",
-                    "WWW",
-                    "  W",
-                });
-
+                        GameManager.drawer.DrawPicture(posX + 1 - selectedShip * 4, posY + 1, new string[]
+                        {
+                            "  W",
+                            "WWW",
+                            "  W",
+                        });
+                    }
                 break;
                 case 3:
                     GameManager.drawer.DrawPicture(posX, posY - selectedShip * 4, new string[]
@@ -525,34 +561,35 @@ namespace GameClient
                        "G   G",
                        "GG GG"
                     });
-
-                for (int i = 1; i <= selectedShip-1; i++)
-                {
-
-                    GameManager.drawer.DrawPicture(posX + 1, posY - i * 4, new string[]
+                    if (timer >= 0.5f)
                     {
-                        "WWW",
-                        "WWW",
-                        "WWW",
-                        "WWW",
-                        "WWW"
-                    });
-                }
+                        for (int i = 1; i <= selectedShip - 1; i++)
+                        {
+                            GameManager.drawer.DrawPicture(posX + 1, posY - i * 4, new string[]
+                        {
+                            "WWW",
+                            "WWW",
+                            "WWW",
+                            "WWW",
+                            "WWW"
+                        });
+                        }
 
-                GameManager.drawer.DrawPicture(posX + 1, posY, new string[]
-                {
-                    "WWW",
-                    "WWW",
-                    "WWW",
-                    " W "
-                });
+                        GameManager.drawer.DrawPicture(posX + 1, posY, new string[]
+                        {
+                            "WWW",
+                            "WWW",
+                            "WWW",
+                            " W "
+                        });
 
-                GameManager.drawer.DrawPicture(posX + 1, posY + 1 - selectedShip * 4, new string[]
-                {
-                    " W ",
-                    " W ",
-                    "WWW",
-                });
+                        GameManager.drawer.DrawPicture(posX + 1, posY + 1 - selectedShip * 4, new string[]
+                        {
+                            " W ",
+                            " W ",
+                            "WWW",
+                        });
+                    }
 
                 break;
             }
